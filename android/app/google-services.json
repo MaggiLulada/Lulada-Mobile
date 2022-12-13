@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "137663367672",
+    "project_id": "lulada-a38cb",
+    "storage_bucket": "lulada-a38cb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137663367672:android:41b2ba93ff0233f02bee0d",
+        "android_client_info": {
+          "package_name": "com.lulada"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "137663367672-o5ad9crbibckrae6pq8eo8fnfiekgkv8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBj5Ex1y_05M27hcv3OkdUqiZiP69FAxpc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "137663367672-o5ad9crbibckrae6pq8eo8fnfiekgkv8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
