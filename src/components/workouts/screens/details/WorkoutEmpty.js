@@ -15,9 +15,9 @@ const WorkoutEmpty = () => {
             style={{ width: 180, height:180}}
         />
      </View>
-     <View style={{alignItems:'center', margin:'5%', marginTop:0}}>
-        <Headline style={{fontSize:22}}>{t('common:workout_details_empty_title')}</Headline>
-        <Subheading style={{textAlign:'center', fontSize:15}}>{t('common:workout_details_empty_description')}</Subheading>
+     <View style={{alignItems:'center', margin:'0%', marginTop:0}}>
+        <Headline style={{fontSize:18}}>{t('common:workout_details_empty_title')}</Headline>
+        <Text style={{textAlign:'center', fontSize:12}}>{t('common:workout_details_empty_description')}</Text>
      </View>
     </View>
   )
