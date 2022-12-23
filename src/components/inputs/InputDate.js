@@ -299,8 +299,6 @@ const InputDate = ({
             )}
           
         
-        
-
             <DatePickerModal
                 locale={locale}
                 mode='single'

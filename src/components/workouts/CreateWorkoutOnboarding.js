@@ -13,6 +13,7 @@ import WorkoutPictures from './screens/create/WorkoutPictures'
 import WorkoutPrice from './screens/create/WorkoutPrice'
 import WorkoutIndications from './screens/create/WorkoutIndications'
 import WorkoutSpeakLanguage from './screens/create/WorkoutSpeakLanguage'
+import WorkoutDateCalendar from './screens/create/WorkoutDateCalendar'
 
 const CreateWorkoutOnboarding = () => {
 
@@ -24,7 +25,7 @@ const CreateWorkoutOnboarding = () => {
         <WorkoutPictures/>,
         <WorkoutLocation/>,
         <WorkoutDescriptionPlace/>,
-        <WorkoutDate/>,
+        <WorkoutDateCalendar/>,
         <WorkoutIndications/>,
         <WorkoutDescription/>,
         <WorkoutSpeakLanguage/>,
