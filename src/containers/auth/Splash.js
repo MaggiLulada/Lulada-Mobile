@@ -62,7 +62,7 @@ const Splash = ({navigation}) => {
     >
       <View style={styles.container}>
         <Image
-          source={require("../../assets/images/lulada.png")}
+          source={require("../../assets/images/lulada_new.png")}
           style={{
             width: "70%",
             resizeMode: "contain",

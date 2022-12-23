@@ -6,10 +6,10 @@ export default {
     workouts: 'Trainings',
     workouts_past: 'Vergangene',
     workouts_upcoming: 'Bevorstehende',
-    create_workout: 'Trainingsplan erstellen',
+    create_workout: 'Training erstellen',
     workouts_details: 'Trainingsdetails',
     profile: 'Profil',
     title_error_network: 'Netzwerkfehler',
-    description_error_network: 'Bitte überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.',
-    try:'versuchen Sie es nochmal'
+    description_error_network: 'Bitte überprüfe deine Internetverbindung und versuche es erneut.',
+    try:'Versuche es nochmal'
 };
