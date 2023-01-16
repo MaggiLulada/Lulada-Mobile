@@ -12,7 +12,7 @@ import SwiperWorkouts from '../swiper/SwiperWorkouts';
 import FastImage from 'react-native-fast-image';
 
 const PrincipalMap = ({ coords, date, screen }) => {
-  
+
   const navigation = useNavigation();
   const { colors } = useTheme();
   const user = useSelector(getUser)
@@ -25,12 +25,12 @@ const PrincipalMap = ({ coords, date, screen }) => {
   const [modalDetailsVisible, setModalDetailsVisible] = useState(false);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [selectedWorkoutIndex, setSelectedWorkoutIndex] = useState(null);
- 
+
   useLayoutEffect(() => {
     mapRef.current.animateCamera({
-      center: { 
+      center: {
         latitude: coords.latitude ? coords.latitude : user.address.lat,
-        longitude:coords.longitude ? coords.longitude : user.address.lng
+        longitude: coords.longitude ? coords.longitude : user.address.lng
       },
       pitch: 0,
       heading: 0,
@@ -40,46 +40,46 @@ const PrincipalMap = ({ coords, date, screen }) => {
     getUpcomingWorkouts(screen, date)
   }, [coords]);
 
-  const getUpcomingWorkouts = async(queryScreen, queryDate) => {
-    try{
-      if(queryScreen == 'NextDays'){
+  const getUpcomingWorkouts = async (queryScreen, queryDate) => {
+    try {
+      if (queryScreen == 'NextDays') {
         firestore().collection('Workouts_Schedule')
-        .where('date', '<=', dateFormart(queryDate))
-        .where('date', '>=', dateFormart(new Date()))
-        .onSnapshot(querySnapshot => {
-          const data = []
-          querySnapshot.forEach(doc => {
-            const {
-              id,
-            } = doc.data();
-            data.push({
-              id: doc.id,
-              ...doc.data()
+          .where('date', '<=', dateFormart(queryDate))
+          .where('date', '>=', dateFormart(new Date()))
+          .onSnapshot(querySnapshot => {
+            const data = []
+            querySnapshot.forEach(doc => {
+              const {
+                id,
+              } = doc.data();
+              data.push({
+                id: doc.id,
+                ...doc.data()
+              })
             })
+            setWorkouts(data)
           })
-          setWorkouts(data)
-        })
       } else {
         firestore().collection('Workouts_Schedule')
-        .where('date', '==', dateFormart(queryDate))
-        .where('state', '==', 'upcoming')
-        .onSnapshot(querySnapshot => {
-          const data = []
-          querySnapshot.forEach(doc => {
-            const {
-              id,
-            } = doc.data();
-            data.push({
-              id: doc.id,
-              ...doc.data()
+          .where('date', '==', dateFormart(queryDate))
+          .where('state', '==', 'upcoming')
+          .onSnapshot(querySnapshot => {
+            const data = []
+            querySnapshot.forEach(doc => {
+              const {
+                id,
+              } = doc.data();
+              data.push({
+                id: doc.id,
+                ...doc.data()
+              })
             })
+            setWorkouts(data)
           })
-          setWorkouts(data)
-        })
       }
-    }catch(err){
+    } catch (err) {
       Alert.alert('Error', err.message)
-    }    
+    }
   }
 
   const orderWorkouts = () => {
@@ -88,7 +88,7 @@ const PrincipalMap = ({ coords, date, screen }) => {
     })
     return workouts
   }
-  
+
 
   const openModal = (workout, index) => {
     console.log(workout.location)
@@ -98,7 +98,7 @@ const PrincipalMap = ({ coords, date, screen }) => {
   }
 
   return (
-    <View style={{flex:1}}>
+    <View style={{ flex: 1 }}>
       <MapView
         ref={mapRef}
         loadingEnabled={true}
@@ -112,12 +112,12 @@ const PrincipalMap = ({ coords, date, screen }) => {
         showsMyLocationButton={true}
         showsCompass={true}
         minZoomLevel={4}
-        maxZoomLevel={15}
+        maxZoomLevel={25}
         zoomControlEnabled={true}
       >
 
-       
-         
+
+
         {workouts.map((workout, index) => {
           return (
             <Marker
@@ -129,18 +129,19 @@ const PrincipalMap = ({ coords, date, screen }) => {
               onPress={() => openModal(workout)}
             >
               <View>
-                <Image 
+                <Image
                   source={{
-                    uri:'https://firebasestorage.googleapis.com/v0/b/lulada-a38cb.appspot.com/o/location.png?alt=media&token=b196c2b2-f216-4f02-9afc-65e781d0615e'
-                  }} 
+                    uri: 'https://firebasestorage.googleapis.com/v0/b/lulada-a38cb.appspot.com/o/location.png?alt=media&token=b196c2b2-f216-4f02-9afc-65e781d0615e'
+                  }}
                   style={{
                     width: 40,
                     height: 54,
-                  }} 
+                  }}
                 />
               </View>
             </Marker>
-          )} 
+          )
+        }
         )}
       </MapView>
       <ModalBottomSheet
@@ -148,34 +149,35 @@ const PrincipalMap = ({ coords, date, screen }) => {
         size='small'
         backgroundModal='#fff'
         onClose={() => console.log('close')}
+
       >
-        <View style={{margin:'1%', marginTop:0, }}>
+        <View style={{ margin: '1%', marginTop: 0, }}>
           {!!selectedWorkout && (
 
             <List.Item
-              title={<Headline style={{fontSize:22}}>{selectedWorkout.name}</Headline>}
+              title={<Headline style={{ fontSize: 22, color: '#000000' }}>{selectedWorkout.name}</Headline>}
               titleNumberOfLines={2}
-              description={<Subheading style={{color:colors.primary, fontSize:20}}>{selectedWorkout.start_time}</Subheading>}
+              description={<Subheading style={{ color: '#000000', fontSize: 20, marginTop: `25%` }}>{selectedWorkout.start_time}</Subheading>}
               left={props => (
-                <FastImage {...props}  
+                <FastImage {...props}
                   source={{
                     uri: selectedWorkout.pictures[0],
-                    priority:FastImage.priority.high,
+                    priority: FastImage.priority.high,
                     cache: FastImage.cacheControl.web
                   }}
                   style={{
-                    width:window.width/5,
-                    height:window.width/5,
-                    borderRadius:100,
-                    marginRight:12,
-                  }}  
+                    width: window.width / 4.5,
+                    height: window.width / 4.5,
+                    borderRadius: 100,
+                    marginRight: 10,
+                  }}
                 />
               )}
               right={props => (
-               <IconButton {...props} icon='chevron-right' size={40} style={{alignItems:'center', alignSelf:'center'}}/>
+                <IconButton {...props} icon='chevron-right' size={40} style={{ alignItems: 'center', alignSelf: 'center' }} />
               )}
               onPress={() => setModalDetailsVisible(!modalDetailsVisible)}
-               
+
             />
           )}
         </View>
@@ -184,9 +186,9 @@ const PrincipalMap = ({ coords, date, screen }) => {
         visible={modalDetailsVisible}
         onRequestClose={() => setModalDetailsVisible(!modalDetailsVisible)}
       >
-        <SwiperWorkouts 
-          selectedWorkout={selectedWorkout} 
-          allWorkouts={workouts} 
+        <SwiperWorkouts
+          selectedWorkout={selectedWorkout}
+          allWorkouts={workouts}
           close={() => setModalDetailsVisible(!modalDetailsVisible)}
         />
       </Modal>

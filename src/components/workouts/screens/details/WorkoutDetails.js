@@ -121,7 +121,7 @@ const WorkoutDetails = ({route}) => {
         return (
           <View style={{justifyContent:'center', padding:'5%'}}>
             <Headline style={{textAlign:'center', fontSize:20, fontFamily:'Montserrat-SemiBold'}}>{t('common:workout_details_really_cancel')}</Headline>
-            <Subheading style={{textAlign:'center', marginTop:'8%', marginBottom:'8%'}}>{t('common:workout_details_really_cancel_desc_instructor')}</Subheading>
+            <Text style={{textAlign:'center', marginTop:'4%', marginBottom:'12%'}}>{t('common:workout_details_really_cancel_desc_instructor')}</Text>
             <ButtonPrimary
               title={t('common:cancel')}
             />
@@ -241,10 +241,10 @@ const WorkoutDetails = ({route}) => {
           justifyContent:'space-between',
         }}
       >
-        <Title style={{fontWeight:'600', color:'#FFF', fontSize:21, marginTop:'4%'}}>{`${dateRelative(`${data.date} ${data.start_time}:00`)}, ${data.start_time}`}</Title>
-        <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center',  width:'90%'}}>
-          <IconButton icon="map-marker" size={25} color="#FFF" />
-          <Subheading style={{color:'#FFF', fontSize:16, fontWeight:'500', textAlign:'center'}}>{data.location.address}</Subheading>
+        <Title style={{fontWeight:'600', color:'#FFF', textAlign: 'center', fontSize:20, marginTop:'4%'}}>{`${dateRelative(`${data.date} ${data.start_time}:00`)}, ${data.start_time}`}</Title>
+        <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center',  width:'93%'}}>
+          <IconButton icon="map-marker" size={22} color="#FFF" />
+          <Text style={{color:'#FFF', fontSize:16, margin: '5%', fontWeight:'370', textAlign:'center'}}>{data.location.address}</Text>
         </View>
         <View style={{alignItems:'center', width:'100%', height:'30%', marginBottom:'8%' }}>
           <Title style={{color:'#FFF', fontSize:16}}>{t('common:workout_details_bring')}</Title>
