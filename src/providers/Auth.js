@@ -16,7 +16,6 @@ export const AuthProvider = ({children, navigation}) => {
         user,
         currentUser,
         setUser,
-       
         logout: async () => {
             try {
                 await auth().signOut();
