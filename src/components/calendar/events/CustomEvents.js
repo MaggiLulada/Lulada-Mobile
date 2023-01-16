@@ -10,7 +10,7 @@ import WeekDaysMin from '../WeekDaysMin'
 import ButtonPrimary from '../../buttons/ButtonPrimary'
 import ButtonSecondary from '../../buttons/ButtonSecondary'
 
-const CustomEvents = ({dayWeek, dateSelected, finalWorkouts}) => {
+const CustomEvents = ({dayWeek, dateSelected, finalWorkouts, onClose}) => {
 
     require('dayjs/locale/de')
     const localeData = require('dayjs/plugin/localeData')
@@ -22,7 +22,7 @@ const CustomEvents = ({dayWeek, dateSelected, finalWorkouts}) => {
    
 
     const [time, setTime] = useState(1)
-    const [modalVisible, setModalVisible] = useState(false)
+    const [viewOptions, setViewOptions] = useState(false)
     const [week, setWeek] = useState([])
     const [workouts, setWorkouts] = useState([])
     
@@ -79,6 +79,8 @@ const CustomEvents = ({dayWeek, dateSelected, finalWorkouts}) => {
         const array = []
         const workouts = []
         const organized = []
+        const workoutsCalendar = []
+        const organizedCalendar = []
 
         week.forEach(day => {
             if(day.checked && day.dayShort === initialDay){
@@ -138,6 +140,9 @@ const CustomEvents = ({dayWeek, dateSelected, finalWorkouts}) => {
                         endTime: dateSelected.endTime,
                     }],
                 })
+                workoutsCalendar.push({
+                    date: dayjs(day.date).add(addDays, 'day').format('YYYY-MM-DD')
+                })
                 organized.push({
                     dayWeek: dayjs(day.date).locale(i18n.language).format('dddd'),
                     workouts: []
@@ -145,97 +150,103 @@ const CustomEvents = ({dayWeek, dateSelected, finalWorkouts}) => {
             })
         }
 
+        console.log(workoutsCalendar)
         //const groupedForDay = groupBy(workouts, 'day')
         workouts.forEach(workout => {
             const index = organized.findIndex(day => day.dayWeek === workout.day)
             organized[index].workouts.push(workout)  
         })
 
-        setModalVisible(false)
-        return finalWorkouts(organized.filter(data => data.workouts != ''))
+        //console.log(organized.filter(data => data.workouts != ''))
+        onClose()
+        return finalWorkouts(workoutsCalendar)
         //return finalWorkouts(organized.filter(data => data.workouts != ''))
     }
     
 
 
     return (
-        <>
-            <List.Item
-                title={t('common:create_workout_date_repeat')}
-                left={props => <List.Icon {...props} icon="reload" />}
-                onPress={() => setModalVisible(!modalVisible)}
-            />
-            <ModalSimple
-                visible={modalVisible}
-                size="large"
-            >
+        <View style={{margin:"5%"}}>
+            <View style={{justifyContent:"center", alignContent:'center'}}>
+                <List.Item
+                    title={t('common:create_workout_date_repeat')}
+                    left={props => <List.Icon {...props} icon="reload" />}
+                    onPress={() => setViewOptions(!viewOptions)}
+                />
+            </View>
+            {viewOptions == true ? (
                 <View style={{width:'100%', alignItems:'center'}}>
                     <View style={{width:'100%'}}>
                         <View
-                            style={{width:'100%', marginTop:'5%', marginBottom:'5%', alignItems:'center'}}
+                           style={{width:'100%', marginTop:'5%', marginBottom:'5%', alignItems:'center'}}
                         >
-                            <Title>{t('common:create_workout_date_custom_header_title')}</Title>
-                            <View style={{flexDirection:'row', width:'100%', justifyContent:'center'}}>
-                                <View style={{width:'35%', alignItems:'center', alignSelf:'center', marginTop:'2%'}}>
-                                    <NumericInput 
-                                        type='number' 
-                                        iconStyle={{color:colors.primary}}
-                                        onChange={(value) => setTime(value)} 
-                                        value={time}
-                                        minValue={1}
-                                        maxValue={8}
-                                        inputStyle={{
-                                            borderBottomWidth:1, 
-                                            borderBottomColor:colors.primary,
-                                            fontFamily:'Montserrat-Regular',
-                                            fontSize:16,
-                                        }}
-                                        borderColor={'#fff'}
-                                        totalHeight={55}
-                                        totalWidth={120}
-                                    />
-                                </View>
-                                <View style={{width:'30%'}}>
-                                    <TextInput
-                                        value={t('common:create_workout_date_week')}
-                                        style={styles.input}
-                                        editable={false}
-                                    />
-                                </View>
-                            </View>
+                           <Title>{t('common:create_workout_date_custom_header_title')}</Title>
+                           <View style={{flexDirection:'row', width:'100%', justifyContent:'center'}}>
+                               <View style={{width:'35%', alignItems:'center', alignSelf:'center', marginTop:'2%'}}>
+                                   <NumericInput 
+                                       type='number' 
+                                       iconStyle={{color:colors.primary}}
+                                       onChange={(value) => setTime(value)} 
+                                       value={time}
+                                       minValue={1}
+                                       maxValue={8}
+                                       inputStyle={{
+                                           borderBottomWidth:1, 
+                                           borderBottomColor:colors.primary,
+                                           fontFamily:'Montserrat-Regular',
+                                           fontSize:16,
+                                       }}
+                                       borderColor={'#fff'}
+                                       totalHeight={55}
+                                       totalWidth={120}
+                                   />
+                               </View>
+                               <View style={{width:'30%'}}>
+                                   <TextInput
+                                       value={t('common:create_workout_date_week')}
+                                       style={styles.input}
+                                       editable={false}
+                                   />
+                               </View>
+                           </View>
                         </View>
                     </View>
                     <View style={{marginTop:'5%',marginBottom:'10%'}}>
-                        <WeekDaysMin
-                            week={week}
-                            setWeek={setWeek}
-                        />
+                       <WeekDaysMin
+                           week={week}
+                           setWeek={setWeek}
+                       />
                     </View>
                     <View style={{margin:'5%',flexDirection:'row', justifyContent:'space-around', width:'100%'}}>
-                        <View>
-                            <ButtonSecondary
+                       <View>
+                           <ButtonSecondary
                                 title={t('common:cancel')}
                                 onPress={() => setModalVisible(!modalVisible)}
                                 labelStyle={{
                                     color: '#707070',
                                     fontSize:18
                                 }}
-                            />
+                           />
                         </View>
-                        <View>
-                            <ButtonPrimary
+                       <View>
+                           <ButtonPrimary
                                 title={t('common:save')}
                                 onPress={weeklyWorkouts}
                                 labelStyle={{
                                     color: '#FFFFFF',
                                     fontSize:18
                                 }}
-                            />
+                           />
                         </View>
                     </View>
                 </View>
-            </ModalSimple>
-        </>
+            ):(
+                <></>
+            )}
+       
+             
+           
+        </View>
     )
 }
 

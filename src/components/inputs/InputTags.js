@@ -54,7 +54,6 @@ const InputTags = ({
                         >
                             {tag}
                         </Chip>
-            
                     </View>
                 ))}
             </View>
