@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text } from 'react-native'
-import { Caption, Headline, Subheading } from 'react-native-paper'
+import { Caption, Headline, Subheading, Title } from 'react-native-paper'
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from 'react-redux';
 import { currentWorkout, disabledDotsSave, discardCurrentWorkout, savingCurrentWorkout } from '../../../../redux/Workouts/WorkoutsSlice';

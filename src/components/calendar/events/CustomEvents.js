@@ -130,7 +130,7 @@ const CustomEvents = ({dayWeek, dateSelected, finalWorkouts, onClose}) => {
 
         for(let i = 0; i < totalWeeks/repeat; i++){
             const addDays = totalAdd * i
-            array.forEach(day => {
+            array.forEach((day, index) => {
                 workouts.push({
                     date: dayjs(day.date).add(addDays, 'day').format('YYYY-MM-DD'),
                     day: dayjs(day.date).locale(i18n.language).format('dddd'),
@@ -141,7 +141,12 @@ const CustomEvents = ({dayWeek, dateSelected, finalWorkouts, onClose}) => {
                     }],
                 })
                 workoutsCalendar.push({
-                    date: dayjs(day.date).add(addDays, 'day').format('YYYY-MM-DD')
+                    index:index,
+                    date: dayjs(day.date).add(addDays, 'day').format('YYYY-MM-DD'),
+                    schedules: [{
+                        startTime: dateSelected.startTime,
+                        endTime: dateSelected.endTime,
+                    }],
                 })
                 organized.push({
                     dayWeek: dayjs(day.date).locale(i18n.language).format('dddd'),
@@ -150,7 +155,7 @@ const CustomEvents = ({dayWeek, dateSelected, finalWorkouts, onClose}) => {
             })
         }
 
-        console.log(workoutsCalendar)
+        //console.log(workoutsCalendar)
         //const groupedForDay = groupBy(workouts, 'day')
         workouts.forEach(workout => {
             const index = organized.findIndex(day => day.dayWeek === workout.day)
@@ -218,16 +223,7 @@ const CustomEvents = ({dayWeek, dateSelected, finalWorkouts, onClose}) => {
                        />
                     </View>
                     <View style={{margin:'5%',flexDirection:'row', justifyContent:'space-around', width:'100%'}}>
-                       <View>
-                           <ButtonSecondary
-                                title={t('common:cancel')}
-                                onPress={() => setModalVisible(!modalVisible)}
-                                labelStyle={{
-                                    color: '#707070',
-                                    fontSize:18
-                                }}
-                           />
-                        </View>
+                      
                        <View>
                            <ButtonPrimary
                                 title={t('common:save')}
