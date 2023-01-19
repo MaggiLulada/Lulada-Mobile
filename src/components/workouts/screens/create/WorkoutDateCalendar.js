@@ -36,9 +36,8 @@ const WorkoutDateCalendar = () => {
   })
   const [workouts, setWorkouts] = useState(current.workouts != '' ? current.workouts : []);
   const [newScheduleToDate, setNewScheduleToDate] = useState({
+    index:null,
     date: '',
-    week: [],
-    workout: [],
     schedules: [],
   })
   const [newScheduleFromDate, setNewScheduleFromDate] = useState('')
@@ -60,41 +59,16 @@ const WorkoutDateCalendar = () => {
   }
 
   // Delete whole day with schedules included
-  const deleteWorkout = (week, workout) => {
+  /**const deleteWorkout = (week, workout) => {
     const newWorkouts = [...workouts]
     const replace = newWorkouts[week].workouts
     replace.splice(workout, 1)
     setWorkouts(newWorkouts)
-  }
+  }**/
 
-  const newSchedule = (details) => {
-    console.log(details, 'detailssss')
-    setWorkouts(details)
-    setNewScheduleToDate({})
-    details.forEach((element, index) => {
-      setNewScheduleToDate({
-        date: element.date,
-        workout: index,
-        schedules: [{
-          startTime: fullDate.startTime,
-          endTime: fullDate.endTime
-        }]
-      })
-    });
-    /**setNewScheduleToDate({})
-    setNewScheduleToDate({
-      date: workout.date,
-      week: week,
-      workout: i,
-      schedules: workout.schedules
-    })**/
-    //console.log('dateeeeeeeeeeeeeeeeeee', newScheduleToDate)
-    setModalVisible(!modalVisible)
-  }
 
   //Add a new schedule within the chosen day
   const addNewSchedule = (day) => {
-    //console.log('schedule', schedule)
     let schedules = [...newScheduleToDate.schedules]
     schedules.push({
       startTime: '',
@@ -109,25 +83,30 @@ const WorkoutDateCalendar = () => {
   // Save a new schedule within the chosen day
   const saveNewSchedule = () => {
     if (newScheduleToDate.date != '' && newScheduleToDate.schedules.length > 0) {
-      console.log('newScheduleToDate', newScheduleToDate)
       const newWorkouts = [...workouts]
-      newWorkouts[newScheduleToDate.week].workouts[newScheduleToDate.workout].schedules = newScheduleToDate.schedules
-      console.log(newWorkouts)
+      newWorkouts[newScheduleToDate.index].schedules = newScheduleToDate.schedules
       setWorkouts(newWorkouts)
-      setModalVisible(!modalVisible)
+      setModalAdd(!modalAdd)
     }
   }
 
   // Delete schedule of a workout day
   const deleteSchedule = (schedule, i) => {
-    //console.log('schedule', schedule)
-    //console.log('i', i)
+    const newWorkouts = [...workouts]
     const newSchedules = [...newScheduleToDate.schedules]
     newSchedules.splice(i, 1)
+    newWorkouts[newScheduleToDate.index].schedules = newSchedules
     setNewScheduleToDate({
       ...newScheduleToDate,
       schedules: newSchedules
     })
+  }
+
+  const selectDayMatch = (dateSelected) => {
+    const day = workouts.filter(workout => workout.date == dateSelected)
+    setNewScheduleToDate(...day)
+    setNewScheduleFromDate(dateSelected)
+    setModalAdd(true)
   }
 
   return (
@@ -144,10 +123,7 @@ const WorkoutDateCalendar = () => {
             <CalendarViewWorkouts
               data={workouts}
               initialSchedule={fullDate}
-              onSelectDayMatch={(e) => {
-                setNewScheduleFromDate(e)
-                setModalAdd(true)
-              }}
+              onSelectDayMatch={selectDayMatch}
             />
           ):(
             <CalendarAddWorkout
@@ -193,7 +169,7 @@ const WorkoutDateCalendar = () => {
             <CustomEvents
               dayWeek={dayjs(fullDate.date).locale(locale).format('dd')}
               dateSelected={fullDate}
-              finalWorkouts={(e) => newSchedule(e)}
+              finalWorkouts={(e) => setWorkouts(e)}
               onClose={() => setModalVisible(!modalVisible)}
             />
           </View>
@@ -201,7 +177,7 @@ const WorkoutDateCalendar = () => {
       </ModalBottomSheet>
       <ModalBottomSheet
         visible={modalAdd}
-        onClose={saveNewSchedule}
+        onClose={() => console.log('hola')}
         size='large'
         backgroundModal='#FFF'
         backDrop={true}
@@ -210,7 +186,7 @@ const WorkoutDateCalendar = () => {
           <Title style={{fontWeight: Platform.OS === 'ios' ? 'bold' : '100', textAlign:'center', fontFamily:'Montserrat-Bold', fontSize:22}}>
             {`${dateLL(newScheduleFromDate)}`}
           </Title>
-          <View style={{ width:'100%', height:'50%', alignSelf:'center', marginTop: Platform.OS === 'ios' ? '-20%' :'-30%'}}>
+          <View style={{ width:'100%', height:'50%', alignSelf:'center', marginTop: Platform.OS === 'ios' ? '-20%' :'-5%'}}>
             {newScheduleToDate != '' && ( 
               newScheduleToDate.schedules.map((schedule, index) => (
                 <View key={index} style={{flexDirection:'row', width:'80%', marginBottom:Platform.OS == 'ios' ? '-9%': '3%'}}>
@@ -231,9 +207,8 @@ const WorkoutDateCalendar = () => {
                         newSchedules[index] = dateFinal
                         setNewScheduleToDate({
                           ...newScheduleToDate,
-                          schedules: newSchedules
+                          schedules:newSchedules
                         })
-                        console.log(newScheduleToDate)
                       }    
                     }}
                     initialValues={{
@@ -252,7 +227,7 @@ const WorkoutDateCalendar = () => {
     
             ))}
           </View>
-          <Title>{JSON.stringify(newScheduleToDate)}</Title>
+
           {newScheduleToDate.schedules.length >= 5 ? (
             <></>
           ):(
@@ -264,6 +239,14 @@ const WorkoutDateCalendar = () => {
               color={colors.secondary}
             />     
           )}
+          <ButtonPrimary
+            title={t('common:save')}
+            onPress={saveNewSchedule}
+            labelStyle={{
+              color: '#FFFFFF',
+              fontSize:18
+            }}
+          />
         </View>
       </ModalBottomSheet>
     </>
