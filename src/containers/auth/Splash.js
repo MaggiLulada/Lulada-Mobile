@@ -13,7 +13,7 @@ import { getDataUser } from "../../redux/User/Actions";
 import { useDispatch } from "react-redux";
 import NetInfo from "@react-native-community/netinfo";
 
-const Splash = ({navigation}) => {
+const Splash = ({ navigation }) => {
 
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(true);
@@ -27,7 +27,7 @@ const Splash = ({navigation}) => {
 
   unsubscribe()
 
-  
+
   useEffect(() => {
     let isMounted = true;
     setTimeout(() => {
@@ -62,11 +62,11 @@ const Splash = ({navigation}) => {
     >
       <View style={styles.container}>
         <Image
-          source={require("../../assets/images/lulada_new.png")}
+          source={require("../../assets/images/splash_test_2.png")}
           style={{
             width: "70%",
             resizeMode: "contain",
-            margin: 30,
+            marginTop: `-66%`,
           }}
         />
         <ActivityIndicator

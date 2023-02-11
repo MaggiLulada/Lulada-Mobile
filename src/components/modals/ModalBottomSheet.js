@@ -57,7 +57,7 @@ const ModalBottomSheet = ({visible, size, backgroundModal, children, backDrop, o
       enablePanDownToClose
       backdropComponent={backDrop === true ? renderBackdrop : null }
       onChange={(index) => {
-        if(index === 0){
+        if(index === 0 || index === -1){
           onClose()
           console.log('close' + index)
         }

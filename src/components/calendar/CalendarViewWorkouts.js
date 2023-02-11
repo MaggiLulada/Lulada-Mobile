@@ -45,7 +45,6 @@ const CalendarViewWorkouts = ({
         const dateMatch = data.filter(item => item.date == day.dateString)
         if (dateMatch.length != 0) {
             onSelectDayMatch(day.dateString)
-            console.log(day, 'Coincidee') 
         } else {
             console.log(dateMatch, 'No coincideeeeee')
         }

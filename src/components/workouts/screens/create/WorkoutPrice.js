@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text } from 'react-native'
-import { Caption, Headline, Subheading } from 'react-native-paper'
+import { Caption, Headline, Subheading, Title } from 'react-native-paper'
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from 'react-redux';
 import { currentWorkout, disabledDotsSave, discardCurrentWorkout, savingCurrentWorkout } from '../../../../redux/Workouts/WorkoutsSlice';
@@ -16,7 +16,7 @@ import * as RNLocalize from 'react-native-localize';
 
 const WorkoutPrice = () => {
 
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   const dispatch = useDispatch()
   const navigation = useNavigation()
   const current = useSelector(currentWorkout)
@@ -28,41 +28,41 @@ const WorkoutPrice = () => {
   const [progress, setProgress] = useState(0)
 
 
-  const createWorkout = async() => {
-    if(price == ''){
+  const createWorkout = async () => {
+    if (price == '') {
       setError(true)
     } else {
       dispatch(disabledDotsSave(true))
       dispatch(savingCurrentWorkout(true))
       setLoading(true)
-      try{
+      try {
         setProgress(10)
         uploadToStorage(current.pictures, `Workouts/${user.id}/${current.name}/`)
-        .then(async(response) => {
-          setProgress(45)
-          const workout = {
-            ...current, 
-            pictures: response.data, 
-            cost: parseInt(price),
-            user:user,
-            state:'upcoming',
-            time_zone: RNLocalize.getTimeZone()
-          }
-          setProgress(60)
-          axios.post('https://us-central1-lulada-a38cb.cloudfunctions.net/createWorkout', workout).then(res => {
-            console.log('res', res)
-            setProgress(85)
-            setProgress(100)
+          .then(async (response) => {
+            setProgress(45)
+            const workout = {
+              ...current,
+              pictures: response.data,
+              cost: parseInt(price),
+              user: user,
+              state: 'upcoming',
+              time_zone: RNLocalize.getTimeZone()
+            }
+            setProgress(60)
+            axios.post('https://us-central1-lulada-a38cb.cloudfunctions.net/createWorkout', workout).then(res => {
+              console.log('res', res)
+              setProgress(85)
+              setProgress(100)
+            })
+          }).catch(err => {
+            console.log('err', err)
+            setLoading(false)
           })
-        }).catch(err => {
-          console.log('err', err)
-          setLoading(false)
-        })
-      }catch (err) {
+      } catch (err) {
         console.log('err', err)
         setLoading(false)
       }
-    }  
+    }
   }
 
   const details = () => {
@@ -70,23 +70,23 @@ const WorkoutPrice = () => {
     navigation.navigate('Initial')
   }
 
-  if(loading){
+  if (loading) {
     return (
       <>
-      <ProgressCircular
-        progress={progress} 
-        title={`${progress}%`} 
-        subtitle={progress === 100 ? t('common:create_workout_ready') : t('common:create_workout_saving')}
-        action={
-          progress === 100 &&
-          <>
-            <ButtonPrimary
-              title={t('common:details')}
-              onPress={details}
-            />
-          </>
-        }
-      />
+        <ProgressCircular
+          progress={progress}
+          title={`${progress}%`}
+          subtitle={progress === 100 ? t('common:create_workout_ready') : t('common:create_workout_saving')}
+          action={
+            progress === 100 &&
+            <>
+              <ButtonPrimary
+                title={t('common:create_workout_look')}
+                onPress={details}
+              />
+            </>
+          }
+        />
       </>
     )
   }
@@ -94,28 +94,28 @@ const WorkoutPrice = () => {
 
   return (
     <>
-      <View key={0} style={{width:'80%'}}>
+      <View key={0} style={{ width: '80%' }}>
         <Headline style={styles.headline}>{t('common:create_workout_price')}</Headline>
         {error === false ? (
-          <Caption style={{ marginTop:'-5%', marginBottom:'5%'}}>{t('common:create_workout_price_description')}</Caption>
-        ):(
-          <Caption style={{ marginTop:'-5%', marginBottom:'5%', color:'#FF0000'}}>{t('common:create_workout_price_description')}</Caption>
+          <Caption style={{ marginTop: '-5%', marginBottom: '5%' }}>{t('common:create_workout_price_description')}</Caption>
+        ) : (
+          <Caption style={{ marginTop: '-5%', marginBottom: '5%', color: '#FF0000' }}>{t('common:create_workout_price_description')}</Caption>
         )}
-       
-        <View style={{width:'100%'}}>
+
+        <View style={{ width: '100%' }}>
           <Input
             label={t('common:create_workout_price_input')}
             value={price}
             keyboardType='decimal-pad'
             onChangeText={(text) => setPrice(text)}
-            style={{backgroundColor:'#FFF', width: '100%'}}
+            style={{ backgroundColor: '#FFF', width: '100%' }}
             underlineColor='#9B9B9B'
             right={'EUR'}
           />
-         
+
         </View>
       </View>
-      <View style={{width:'80%', margin:'8%'}}>
+      <View style={{ width: '80%', margin: '8%' }}>
         <ButtonPrimary
           title={t('common:finish')}
           onPress={createWorkout}
