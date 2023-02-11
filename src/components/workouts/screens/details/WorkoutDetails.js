@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { View, Text, ScrollView, Alert, FlatList, Dimensions, ImageBackground } from 'react-native'
-import { Button, Chip, Divider, Headline, IconButton, List, Menu, Provider, Subheading, Surface, Title, useTheme } from 'react-native-paper'
+import { Button, Caption, Chip, Divider, Headline, IconButton, List, Menu, Provider, Subheading, Surface, Title, useTheme } from 'react-native-paper'
 import { dateRelative } from '../../../../utils/date'
 import { t } from 'i18next'
 import firestore  from '@react-native-firebase/firestore'
@@ -227,21 +227,67 @@ const WorkoutDetails = ({route}) => {
         }}
       />
       
-      <ImageBackground 
-        source={usersPaid.length < 2 ? imageFullUsers : imageEmptyUsers} 
-        resizeMethod='resize'
-        resizeMode='stretch'
+      <View
         style={{
+          flex:1,
           width:'100%', 
           height:height/4.6, 
-          backgroundColor:colors.primary, 
-          borderTopRightRadius:40,
-          borderTopLeftRadius:40,
-          alignItems:'center',
-          justifyContent:'space-between',
+          flexDirection:'row'
         }}
       >
-        <Title style={{fontWeight:'600', color:'#FFF', textAlign: 'center', fontSize:20, marginTop:'4%'}}>{`${dateRelative(`${data.date} ${data.start_time}:00`)}, ${data.start_time}`}</Title>
+        <View style={{flexDirection:'column', justifyContent:'center', alignItems:'center', width:'40%'}}>
+          <FastImage 
+            style={{ width: 90, height:90, borderRadius:100}}
+            source={{
+              uri:data.user.picture,
+              priority:FastImage.priority.high
+            }}
+            resizeMode={FastImage.resizeMode.cover}
+          />
+          <Title>{data.user.name}</Title>
+          <Caption>Trainer</Caption>
+        </View>
+        <View style={{flexDirection:'column', width:'60%'}}>
+          <Title style={{fontWeight:'600', textAlign: 'center', fontSize:22}}>{`${dateRelative(`${data.date} ${data.start_time}:00`)}, ${data.start_time}`}</Title>
+          <View style={{flexDirection:'row', marginTop:'4%'}}>
+            <IconButton icon="map-marker-outline" size={22} color="#000" />
+            <Title style={{color:'#000', fontSize:16, margin:'5%', textAlign:'right', textDecorationLine:'underline'}}>{data.location.address}</Title>
+          </View>
+          <ScrollView 
+            horizontal
+            style={{flexDirection:'row', marginRight:'10%', marginTop:'5%', alignContent:'flex-end'}}
+            showsHorizontalScrollIndicator={false}
+          >
+            {data.instructions.map((tag, index) => (
+              <View key={index} style={{ margin: 2}}>
+                <Chip
+                  key={index}
+                    mode='flat'
+                    //style={{ backgroundColor:colors.primary+'60' }}
+                >
+                    {tag}
+                </Chip>
+                {renderContentDetails(typeDetails)}
+              </View>
+            ))}
+          
+          </ScrollView>
+        </View>
+        <ModalSimple
+          visible={modalVisible}
+          size='large'
+          close={() => setModalVisible(!modalVisible)}
+        >
+          {renderContentDetails(typeDetails)}
+        </ModalSimple>
+      </View>
+    </View>
+  )
+}
+
+export default WorkoutDetails
+
+{/**<Title style={{fontWeight:'600', textAlign: 'center', fontSize:20, marginTop:'4%'}}>{`${dateRelative(`${data.date} ${data.start_time}:00`)}, ${data.start_time}`}</Title>
         <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center',  width:'93%'}}>
           <IconButton icon="map-marker" size={22} color="#FFF" />
           <Text style={{color:'#FFF', fontSize:16, margin: '5%', fontWeight:'370', textAlign:'center'}}>{data.location.address}</Text>
@@ -263,17 +309,4 @@ const WorkoutDetails = ({route}) => {
             ))}
           
           </View>
-        </View>
-        <ModalSimple
-          visible={modalVisible}
-          size='large'
-          close={() => setModalVisible(!modalVisible)}
-        >
-          {renderContentDetails(typeDetails)}
-        </ModalSimple>
-      </ImageBackground>
-    </View>
-  )
-}
-
-export default WorkoutDetails
+            </View>**/}
