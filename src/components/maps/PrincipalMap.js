@@ -27,10 +27,11 @@ const PrincipalMap = ({ coords, date, screen }) => {
   const [selectedWorkoutIndex, setSelectedWorkoutIndex] = useState(null);
 
   useLayoutEffect(() => {
+    console.log(coords, 'coordenadassssssss')
     mapRef.current.animateCamera({
       center: {
-        latitude: coords.latitude ? coords.latitude : user.address.lat,
-        longitude: coords.longitude ? coords.longitude : user.address.lng
+        latitude: coords != null ? coords.latitude : user.address.lat,
+        longitude: coords != null ? coords.longitude : user.address.lng
       },
       pitch: 0,
       heading: 0,
@@ -100,6 +101,7 @@ const PrincipalMap = ({ coords, date, screen }) => {
   return (
     <View style={{ flex: 1 }}>
       <MapView
+        useNativeDriver={false}
         ref={mapRef}
         loadingEnabled={true}
         loadingBackgroundColor={colors.accent}
@@ -115,16 +117,14 @@ const PrincipalMap = ({ coords, date, screen }) => {
         maxZoomLevel={25}
         zoomControlEnabled={true}
       >
-
-
-
         {workouts.map((workout, index) => {
+          const location = workout.location
           return (
             <Marker
               key={index}
               coordinate={{
-                latitude: workout.location.lat,
-                longitude: workout.location.lng,
+                latitude: location.lat ? location.lat : 0,
+                longitude: location.lng ? location.lng : 0,
               }}
               onPress={() => openModal(workout)}
             >
