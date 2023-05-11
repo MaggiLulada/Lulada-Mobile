@@ -9,6 +9,7 @@ export const uploadToStorage = (files, routeSave) => {
             const promises = [];
             const urls = [];
             files.map((file) => {
+                console.log(file, 'fileeeeeee')
                 const uri = file.uri;
                 const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : file.uri;
                 const fileRef = storage().ref(`${routeSave}/${file.fileName}`)
