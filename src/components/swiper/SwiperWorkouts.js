@@ -1,7 +1,7 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react'
 import { View, Dimensions, Platform, ScrollView, Modal, Alert, Image} from 'react-native'
 import firestore from '@react-native-firebase/firestore'
-import { Avatar, Chip, Headline, IconButton, Subheading, Text, Title, useTheme } from 'react-native-paper'
+import { Avatar, Caption, Chip, Headline, IconButton, Subheading, Text, Title, useTheme } from 'react-native-paper'
 import { styles } from '../../assets/styles/globalStyles'
 import { dateRelative } from '../../utils/date'
 import { t } from 'i18next'
@@ -14,6 +14,8 @@ import Pay from '../workouts/screens/payment/Pay'
 import { useSelector } from 'react-redux'
 import { getUser } from '../../redux/User/UserSlice'
 import FastImage from 'react-native-fast-image'
+import ButtonPrimary from '../buttons/ButtonPrimary'
+import BeforePayment from '../workouts/screens/payment/BeforePayment'
 
 
 const SwiperWorkouts = ({selectedWorkout, allWorkouts, close}) => {
@@ -35,7 +37,7 @@ const SwiperWorkouts = ({selectedWorkout, allWorkouts, close}) => {
     
     const startPay = (data) => {
         setDataPay(data)
-        setFooter('im_in')
+        setModalPay(!modalPay)
     }
 
     const getPaidWorkout = async () => {
@@ -83,25 +85,49 @@ const SwiperWorkouts = ({selectedWorkout, allWorkouts, close}) => {
         } else if (footer === 'initial') {
             return (
                 <>
-                    <Title style={{fontWeight:'600', color:'#FFF', fontSize:22}}>{`${dateRelative(`${page.date} ${page.start_time}:00`)}, ${page.start_time} - ${page.end_time}`}</Title>
-                    <Subheading style={{color:'#FFF', fontSize:16}}>{t('common:workout_details_bring')}</Subheading>
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom:'6%'}}>
-                        {page.instructions.map((tag, index) => (
-                            <View key={index} style={{ margin: 5 }}>
-                                <Chip mode='flat'>
-                                    {tag}
-                                </Chip>
+                    <View
+                        style={{
+                            flex:2,
+                            width:'100%', 
+                            flexDirection:'row',
+                            marginBottom:'8%',
+                        }}
+                    >
+                        <View style={{flexDirection:'column', justifyContent:'center', alignItems:'center', width:'40%'}}>
+                            <FastImage
+                                style={{ width: 90, height:90, borderRadius:100}}
+                                source={{
+                                uri:page.user.picture,
+                                priority:FastImage.priority.high
+                                }}
+                                resizeMode={FastImage.resizeMode.cover}
+                            /> 
+                            <Title>{page.user.name}</Title>
+                            <Caption style={{marginTop:'-5%'}}>Trainer</Caption>
+                        </View>
+                        <View style={{flexDirection:'column', width:'60%', marginTop:'-8%'}}>
+                            <Title style={{fontWeight:'600', textAlign: 'center', fontSize:22}}>{`${dateRelative(`${page.date} ${page.start_time}:00`)}, ${page.start_time}`}</Title>
+                            <View style={{flexDirection:'row', justifyContent:'flex-end', marginRight:'4%'}}>
+
+                                <Title style={{color:'#000', fontSize:16, margin:'5%', textAlign:'right', textDecorationLine:'underline'}}>{page.location.address}</Title>
                             </View>
-                        ))}
+                            <View style={{flexDirection:'row', alignItems:'center', marginRight:'5%', justifyContent:'flex-end'}}>
+                                <IconButton icon="currency-eur" size={20} color="#000" />
+                                <Title style={{color:'#000', fontSize:16, margin:'5%', textAlign:'right'}}>{page.cost.toFixed(2)}</Title>
+                            </View>
+                        </View>
                     </View>
                     {user.id == page.user.id && (
-                    <ButtonSecondary
-                        onPress={() => startPay(page)}
-                        style={{marginTop:'5%'}}
-                        title={t('common:im_in')}
-                        labelStyle={{color:colors.primary, fontSize:24, fontWeight:'500'}}
-                    />
-                    )}
+                        <View style={{margin:'4%'}}>
+                            <ButtonPrimary
+                                //onPress={() => setModalPay(!modalPay)}
+                                onPress={() => startPay(page)}
+                                style={{marginTop:'5%'}}
+                                title={t('common:im_in')}
+                                labelStyle={{color:'#fff', fontSize:24, fontWeight:'500'}}
+                            />
+                        </View>
+                    )}       
                 </>
             )
         } else if (footer === 'im_in') {
@@ -206,20 +232,9 @@ const SwiperWorkouts = ({selectedWorkout, allWorkouts, close}) => {
                                 </View>
                                 
                             </ScrollView>
-                            <View 
-                                style={{
-                                    width:width, 
-                                    height:'28%', 
-                                    backgroundColor:colors.primary, 
-                                    borderTopRightRadius:40,
-                                    borderTopLeftRadius:40,
-                                    overflow:'hidden',
-                                    alignItems:'center',
-                                    padding:'5%'
-                                }}
-                            >
-                                {filterPaidWorkout(page)}
-                            </View>
+                          
+                            {filterPaidWorkout(page)}
+                           
                             <LinearGradient
                                 colors={['rgba(150, 150, 150, 0.4)', 'rgba(130, 130, 130, 0.2)', 'rgba(120, 120, 120, 0.1)', 'transparent']}
                                 style={{
@@ -260,6 +275,7 @@ const SwiperWorkouts = ({selectedWorkout, allWorkouts, close}) => {
                 visible={modalPay}
                 onRequestClose={() => setModalPay(!modalPay)}
             >
+               {/**<BeforePayment close={() => setModalPay(!modalPay)} data={dataPay}/>**/}
                 <Pay 
                     dataPay={dataPay} 
                     close={closeModal}

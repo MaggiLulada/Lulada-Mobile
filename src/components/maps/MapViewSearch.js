@@ -115,8 +115,8 @@ export default function MapViewSearch({date, screen}) {
 
     Geolocation.getCurrentPosition(
       (position) => {
-        setLocation(position);
-        console.log(position);
+        setLocation(position.coords);
+        console.log(position.coords, 'position');
       },
       (error) => {
         Alert.alert(`Code ${error.code}`, error.message);
@@ -213,7 +213,7 @@ export default function MapViewSearch({date, screen}) {
   return (
     <View style={styles.mainContainer}>
       {location && (
-        <PrincipalMap coords={location.coords} date={date} screen={screen} />
+        <PrincipalMap coords={location} date={date} screen={screen} />
       )}
     </View>
   );

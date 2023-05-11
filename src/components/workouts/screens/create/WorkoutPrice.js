@@ -39,6 +39,7 @@ const WorkoutPrice = () => {
         setProgress(10)
         uploadToStorage(current.pictures, `Workouts/${user.id}/${current.name}/`)
           .then(async (response) => {
+            console.log(response)
             setProgress(45)
             const workout = {
               ...current,

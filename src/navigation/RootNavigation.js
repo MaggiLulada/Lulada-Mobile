@@ -40,7 +40,6 @@ import { getUser } from '../redux/User/UserSlice';
 import EditWorkoutOnboarding from '../components/workouts/screens/edit/EditWorkoutOnboarding';
 
 
-
 const AuthStack = createNativeStackNavigator();
 const AuthStackScreen = () => (
 
